@@ -81,6 +81,7 @@ void setOutput(GtkWidget *wid, gpointer *data)
     char port = atoi(selected);
     INP_GPIO(port);
     OUT_GPIO(port);
+    
     if (!state[port])
     {
         GPIO_SET = (1 << port);
@@ -110,6 +111,7 @@ void end_program(GtkWidget *wid, gpointer ptr)
 {
     gtk_main_quit();
 }
+
 int main(int argc, char *argv[])
 {
     if (map_peripheral(&gpio) == -1)
@@ -133,8 +135,6 @@ int main(int argc, char *argv[])
     lbl3 = gtk_label_new("Messages");
     gtk_scale_set_draw_value(GTK_SCALE(scale), TRUE);
 
-    struct portStruct data = {17, 10};
-
     g_signal_connect(win, "delete_event", G_CALLBACK(end_program), NULL);
     g_signal_connect(comb1, "changed", G_CALLBACK(setOutput), NULL);
     g_signal_connect(comb2, "changed", G_CALLBACK(showInput), NULL);
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
     if (sigaction(SIGALRM, &sa, NULL) == -1)
         printf("sigaction");
 
-    itv.it_value.tv_sec = 3;
+    itv.it_value.tv_sec = 1;
     itv.it_value.tv_usec = 0;
     itv.it_interval.tv_sec = 3;
     itv.it_interval.tv_usec = 0;
